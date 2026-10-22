@@ -1,0 +1,288 @@
+@model LegalRequestForm.Models.LegalRequestModel
+@{
+    ViewData["Title"] = "ملصق المعاملة والباركود";
+}
+
+<div class="app-container" dir="rtl">
+    <aside class="app-sidebar" id="appSidebar" aria-label="إعدادات ملصق المعاملة والباركود">
+        <div class="sidebar-header">
+            <div class="sidebar-logo-box">
+                <img src="~/images/saudiaLogo.png" alt="شعار وزارة البيئة والمياه والزراعة" class="sidebar-logo-img" />
+            </div>
+            <div class="sidebar-title-group">
+                <h1 class="sidebar-main-title">ملصق المعاملة والباركود</h1>
+                <span class="sidebar-sub-title">معالجة وتثبيت الباركود بدقة 100%</span>
+            </div>
+        </div>
+
+        <div class="sidebar-scrollable-body">
+            <section class="sidebar-panel-card">
+                <div class="panel-card-body">
+                    <div class="control-group">
+                        <div class="label-with-shortcut">
+                            <span class="control-label">اسم الجهة:</span>
+                            <button type="button" class="label-mini-btn" id="btnChangeStickerLogo" title="تغيير اللوجو">تغيير اللوجو</button>
+                            <input type="file" id="stickerLogoFileInput" accept="image/*" style="display:none;" />
+                        </div>
+                        <input type="text" id="txOrgNameInput" class="form-input-text" value="وزارة البيئة والمياه والزراعة" />
+                    </div>
+
+                    <div class="control-group">
+                        <span class="control-label">الإدارة / القسم:</span>
+                        <input type="text" id="txDeptNameInput" class="form-input-text" value="إدارة الاتصالات الإدارية" />
+                    </div>
+
+                    <div class="control-group">
+                        <span class="control-label">نوع المعاملة:</span>
+                        <div class="tx-toggle-group">
+                            <button type="button" class="tx-toggle-btn active tx-outgoing" id="btnTxOutgoing">
+                                <span class="badge-dot"></span>
+                                <span>صادر</span>
+                            </button>
+                            <button type="button" class="tx-toggle-btn tx-incoming" id="btnTxIncoming">
+                                <span class="badge-dot"></span>
+                                <span>وارد</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-row-grid">
+                        <div class="control-group">
+                            <span class="control-label">رقم الصادر / الوارد:</span>
+                            <input type="text" id="txNumberInput" class="form-input-text" value="211" placeholder="مثال: 211 أو 20261058" maxlength="30" />
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label">المرفقات:</span>
+                            <input type="text" id="txAttachmentsInput" class="form-input-text" value="بدون" placeholder="مثال: بدون" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="label-with-shortcut">
+                            <span class="control-label">التاريخ (ميلادي - هجري):</span>
+                            <button type="button" class="label-mini-btn" id="btnTodayDate" title="تعيين تاريخ اليوم تلقائياً">اليوم</button>
+                        </div>
+                        <input type="text" id="txDateInput" class="form-input-text" value="28/09/2026-17/04/1448" placeholder="مثال: 28/09/2026-17/04/1448" />
+                    </div>
+
+                    <div class="control-group">
+                        <span class="control-label">الفرع / الإدارة:</span>
+                        <input type="text" id="txBranchInput" class="form-input-text" value="فرع منطقة حائل" placeholder="اسم الفرع" />
+                    </div>
+
+                    <div class="shift-toggle-row">
+                        <span class="control-label">إزاحة بداية النص تحت الملصق:</span>
+                        <label class="switch-toggle" title="تفريغ مساحة علوية للملصق لمنع تداخله مع النص">
+                            <input type="checkbox" id="chkShiftContent" checked />
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <span class="control-label">موضع الملصق السريع:</span>
+                        <div class="position-grid">
+                            <button type="button" class="pos-btn" data-pos-preset="top-right">أعلى يمين</button>
+                            <button type="button" class="pos-btn" data-pos-preset="top-center">أعلى وسط</button>
+                            <button type="button" class="pos-btn active" data-pos-preset="top-left">أعلى يسار</button>
+                            <button type="button" class="pos-btn" data-pos-preset="bottom-right">أسفل يمين</button>
+                            <button type="button" class="pos-btn" data-pos-preset="bottom-center">أسفل وسط</button>
+                            <button type="button" class="pos-btn" data-pos-preset="bottom-left">أسفل يسار</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-info-note">
+                        💡 يمكنك سحب الملصق بحرية بالماوس لضبط موضعه بدقة داخل الصفحة.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </aside>
+
+    <div class="app-main-layout" id="mainWorkspace">
+        <header class="app-header" id="appHeader">
+            <div class="header-toolbar">
+                <button type="button" class="btn-import-header" id="btnUploadTrigger" title="استيراد ملف PDF من جهازك">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    <span>استيراد ملف PDF</span>
+                </button>
+                <input type="file" id="pdfFileInput" accept=".pdf,application/pdf" style="display:none;" />
+
+                <div class="file-status-chip" id="fileStatusChip">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <span class="file-name-truncate" id="docFileName">لم يتم اختيار ملف بعد</span>
+                    <button type="button" class="chip-btn-remove" id="btnRemoveDoc" style="display: none;" title="إغلاق المستند">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="toolbar-divider"></div>
+
+                <div class="toolbar-group">
+                    <button type="button" class="tool-icon-btn" id="btnPrevPage" disabled title="الصفحة السابقة">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                    <span class="page-indicator-text" id="pageIndicator">صفحة 1 من 1</span>
+                    <button type="button" class="tool-icon-btn" id="btnNextPage" disabled title="الصفحة التالية">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="toolbar-group">
+                    <button type="button" class="tool-icon-btn" id="btnZoomOut" title="تصغير">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="tool-icon-btn" id="btnResetZoom" title="إعادة ضبط الحجم (100%)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="tool-icon-btn" id="btnZoomIn" title="تكبير">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button type="button" class="btn-secondary-action" id="btnPrintDocument" disabled title="طباعة المستند">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>طباعة</span>
+                </button>
+
+                <button type="button" class="btn-primary-action" id="btnDownloadPdf" disabled title="تصدير وتنزيل ملف PDF مع الملصق المدمج">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span>تحميل PDF</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="document-viewport" id="docViewport">
+            <div class="empty-dropzone" id="pdfDropZone">
+                <div class="dropzone-icon-box">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                </div>
+                <h3 class="dropzone-title">اسحب وأفلت ملف الـ PDF هنا</h3>
+                <p class="dropzone-subtitle">أو انقر لاختيار ملف PDF محلي من جهازك لعرضه وإضافة ملصق الباركود إليه</p>
+                <div class="dropzone-btn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <span>اختر ملف PDF</span>
+                </div>
+            </div>
+
+            <div id="canvasArea" style="display: none;">
+                <div class="document-canvas-wrapper" id="pdfPageContainer">
+                    <img id="pdfPageImage" class="document-page-image" alt="صفحة المستند" draggable="false" />
+
+                    <div class="sticker-overlay-container" id="stickerOverlayContainer">
+                        
+                        <div class="sticker-card" id="stickerCard">
+                            <div class="sticker-drag-handle-pill" id="stickerDragHandle" data-html2canvas-ignore="true" title="اضغط واسحب لتحريك الملصق">
+                                <span class="handle-dots">⠿</span>
+                                <span>تحريك الملصق</span>
+                            </div>
+
+                            <div class="sticker-header-row">
+                                <div class="sticker-header-brand">
+                                    <div class="sticker-logo-box" title="انقر لاختيار لوجو">
+                                        <img src="~/images/saudiaLogo.png" alt="شعار" id="stickerLogoImg" class="sticker-logo-img" />
+                                    </div>
+                                    <div class="sticker-org-text-group">
+                                        <span class="sticker-org-name" id="stickerOrgNameDisplay">وزارة البيئة والمياه والزراعة</span>
+                                        <span class="sticker-dept-name" id="stickerDeptNameDisplay">إدارة الاتصالات الإدارية</span>
+                                    </div>
+                                </div>
+                                <div class="sticker-type-badge outgoing" id="stickerTypeBadge">
+                                    <span class="badge-dot"></span>
+                                    <span id="stickerTypeText">صادر</span>
+                                </div>
+                            </div>
+
+                            <div class="sticker-inner-box">
+                                <div class="sticker-data-row">
+                                    <span class="sticker-label" id="stickerNumberLabel">رقم الصادر:</span>
+                                    <span class="sticker-number-val" id="stickerNumberDisplay">211</span>
+                                </div>
+
+                                <div class="sticker-dotted-divider"></div>
+
+                                <div class="sticker-data-row">
+                                    <span class="sticker-label">المرفقات:</span>
+                                    <span class="sticker-text-val" id="stickerAttachDisplay">بدون</span>
+                                </div>
+
+                                <div class="sticker-dotted-divider"></div>
+
+                                <div class="sticker-data-row">
+                                    <span class="sticker-label">تاريخ القيد:</span>
+                                    <span class="sticker-date-val" id="stickerDateDisplay">28/09/2026-17/04/1448</span>
+                                </div>
+
+                                <div class="sticker-branch-pill">
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                    <span id="stickerBranchDisplay">فرع منطقة حائل</span>
+                                </div>
+                            </div>
+
+                            <div class="sticker-barcode-box">
+                                <svg id="stickerBarcodeSvg"></svg>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <div id="printOnlyContainer" class="print-only-container"></div>
+    </div>
+
+    <div id="feedbackToast" class="feedback-toast" role="status" aria-live="polite">
+        <span id="feedbackToastMsg">تمت العملية بنجاح</span>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+    <script type="module" src="~/js/app.js?v=@DateTime.Now.Ticks"></script>
+}
